@@ -1,0 +1,49 @@
+CREATE TABLE `dinner`.`clientes` (
+  `idclientes` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(255) NOT NULL,
+  `first_name` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`idclientes`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+
+  CREATE TABLE `dinner`.`productos` (
+  `idproductos` INT NOT NULL AUTO_INCREMENT,
+  `nombre_producto` VARCHAR(255) NOT NULL,
+  `precio` DECIMAL NOT NULL,
+  PRIMARY KEY (`idproductos`));
+
+  CREATE TABLE `dinner`.`pedidos` (
+  `id_pedido` INT NOT NULL AUTO_INCREMENT,
+  `total_orden` DECIMAL NOT NULL,
+  `fecha` DATETIME NOT NULL DEFAULT current_timestamp,
+  `cliente_id` INT NOT NULL,
+  PRIMARY KEY (`id_pedido`),
+  INDEX `cliente_id_idx` (`cliente_id` ASC) VISIBLE,
+  CONSTRAINT `cliente_id`
+    FOREIGN KEY (`cliente_id`)
+    REFERENCES `dinner`.`clientes` (`idclientes`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+    ALTER TABLE `dinner`.`clientes` 
+CHANGE COLUMN `idclientes` `cliente_id` INT NOT NULL AUTO_INCREMENT ;
+
+CREATE TABLE `dinner`.`pedidos_productos` (
+  `pedidos_productos_id` INT NOT NULL AUTO_INCREMENT,
+  `pedido_id` INT NOT NULL,
+  `producto_id` INT NOT NULL,
+  `cant` INT NOT NULL,
+  PRIMARY KEY (`pedidos_productos_id`),
+  INDEX `pedido_id_idx` (`pedido_id` ASC) VISIBLE,
+  INDEX `producto_id_idx` (`producto_id` ASC) VISIBLE,
+  CONSTRAINT `pedido_id`
+    FOREIGN KEY (`pedido_id`)
+    REFERENCES `dinner`.`pedidos` (`id_pedido`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `producto_id`
+    FOREIGN KEY (`producto_id`)
+    REFERENCES `dinner`.`productos` (`idproductos`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+    
